@@ -58,6 +58,7 @@ For a list of available commands run /help\n`);
     if (command === 'help') {
       const message = `/help\t\t\t\tShows this help
 /nick <new_nicknam>\t\tChanges your nickname
+/quit
 `;
       sender.write(message);
       return;
@@ -70,6 +71,9 @@ For a list of available commands run /help\n`);
       console.log(`Command: changing nick from ${sender.nick} to ${args[0]}`);
       this.emit('broadcast', 'server', `${sender.nick} changed their nickname to ${args[0]}\n`);
       sender.nick = args[0];
+      return;
+    } else if (command === 'quit') {
+      sender.end();
       return;
     }
   });
