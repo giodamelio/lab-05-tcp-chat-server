@@ -1,0 +1,11 @@
+{
+  "name": "lab-giodamelio",
+  "version": "1.0.0",
+  "description": "A simple tcp chat server",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gio d'Amelio",
+  "license": "MIT"
+}
