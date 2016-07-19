@@ -58,7 +58,7 @@ module.exports = function createServer() {
         client.end();
       }
       return;
-    } else if (command === 'quit') {
+    } else if (command === 'shutdown') {
       pool.ee.emit('broadcast', 'server', 'Server is shutting down\n');
       for (const id of Object.keys(pool.clients)) {
         const client = pool.clients[id];
