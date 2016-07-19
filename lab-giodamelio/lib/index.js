@@ -1,11 +1,6 @@
 'use strict';
-const net = require('net');
+const createServer = require('./server');
 
-module.exports = function createServer() {
-  const server = net.createServer((socket) => {
-    socket.write('Hello World');
-    socket.end();
-  });
-
-  return server;
-};
+const server = createServer();
+server.listen(3000);
+console.log('Chat server listening at tcp://localhost:3000');
