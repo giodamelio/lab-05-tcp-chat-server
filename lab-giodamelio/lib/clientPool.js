@@ -30,6 +30,8 @@ function ClientPool() {
     for (const id of Object.keys(this.clients)) {
       const client = this.clients[id];
       if (sender.id !== client.id) {
+        // TODO: send username in color
+        client.write(`${sender.nick}: `);
         client.write(message);
       }
     }
