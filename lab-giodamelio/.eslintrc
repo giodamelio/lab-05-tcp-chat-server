@@ -1,6 +1,6 @@
 {
   "extends": "airbnb-base",
   "rules": {
-    "strict": ["error", "global"]
+    "strict": [0, "global"]
   }
 }
