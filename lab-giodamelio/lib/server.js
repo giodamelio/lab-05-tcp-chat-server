@@ -30,5 +30,36 @@ module.exports = function createServer() {
     });
   });
 
+  // Listen for server commands from stdin
+  process.stdin.on('data', (rawCommand) => {
+    rawCommand = rawCommand.toString().slice(1).trim().split(' ');
+    const command = rawCommand[0];
+    const args = rawCommand.splice(1);
+
+    if (command === 'list') {
+      for (const id of Object.keys(pool.clients)) {
+        const client = pool.clients[id];
+        process.stdout.write(`${client.nick} (${client.id})\n`);
+      }
+      return;
+    } else if (command === 'kick') {
+      if (args.length !== 1) {
+        process.stdout.write('Usage /kick <id>\n');
+        return;
+      }
+
+      for (const id of Object.keys(pool.clients)) {
+        if (id !== args[0]) {
+          continue;
+        }
+        const client = pool.clients[id];
+        process.stdout.write(`Kicking user ${client.nick}(${client.id})\n`);
+        client.write('You have been kicked\n');
+        client.end();
+      }
+      return;
+    }
+  });
+
   return server;
 };
