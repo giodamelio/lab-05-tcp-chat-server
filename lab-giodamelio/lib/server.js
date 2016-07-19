@@ -58,6 +58,13 @@ module.exports = function createServer() {
         client.end();
       }
       return;
+    } else if (command === 'quit') {
+      pool.ee.emit('broadcast', 'server', 'Server is shutting down\n');
+      for (const id of Object.keys(pool.clients)) {
+        const client = pool.clients[id];
+        client.end();
+      }
+      process.exit(0);
     }
   });
 
