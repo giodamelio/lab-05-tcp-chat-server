@@ -27,6 +27,7 @@ function ClientPool() {
 
     // Send welcome message
     client.write(`Welcome to the ${chalk.underline.bold.white('BEST')} chat server ever!
+Run /nick <new_nickname> to set your name
 For a list of available commands run /help\n`);
 
     // Announce user
@@ -45,7 +46,9 @@ For a list of available commands run /help\n`);
     process.stdout.write(`Message: ${this.formatMessage(sender, message.toString())}`);
     for (const id of Object.keys(this.clients)) {
       const client = this.clients[id];
-      client.write(this.formatMessage(sender, message));
+      if (sender.id !== client.id) {
+        client.write(this.formatMessage(sender, message));
+      }
     }
   });
 
