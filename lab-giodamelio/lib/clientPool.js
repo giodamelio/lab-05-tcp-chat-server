@@ -58,7 +58,8 @@ For a list of available commands run /help\n`);
     if (command === 'help') {
       const message = `/help\t\t\t\tShows this help
 /nick <new_nicknam>\t\tChanges your nickname
-/quit
+/list\t\t\t\tList current users
+/quit\t\t\t\tGoodbye
 `;
       sender.write(message);
       return;
@@ -74,6 +75,16 @@ For a list of available commands run /help\n`);
       return;
     } else if (command === 'quit') {
       sender.end();
+      return;
+    } else if (command === 'list') {
+      const users = [];
+      for (const id of Object.keys(this.clients)) {
+        const client = this.clients[id];
+        users.push(chalk[client.color](client.nick));
+      }
+      sender.write(`${users.join(', ')}\n`);
+    } else {
+      sender.write(`Command '${command}'is not supported\n`);
       return;
     }
   });
