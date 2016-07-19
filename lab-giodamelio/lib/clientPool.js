@@ -2,7 +2,11 @@
 const util = require('util');
 const EE = require('events');
 
+const chalk = require('chalk');
+
 const shortid = require('shortid');
+
+const colors = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan'];
 
 function ClientPool() {
   EE.call(this);
@@ -15,6 +19,10 @@ function ClientPool() {
     const id = shortid.generate();
     client.id = id;
     client.nick = `user_${id}`;
+
+    // Pick out a color for the user
+    client.color = colors[Math.floor(colors.length * Math.random())];
+
     this.clients[id] = client;
     console.log(`Connection (id: ${id})`);
   });
@@ -30,8 +38,8 @@ function ClientPool() {
     for (const id of Object.keys(this.clients)) {
       const client = this.clients[id];
       if (sender.id !== client.id) {
-        // TODO: send username in color
-        client.write(`${sender.nick}: `);
+        const username = chalk[sender.color].underline(sender.nick);
+        client.write(`${username}: `);
         client.write(message);
       }
     }
