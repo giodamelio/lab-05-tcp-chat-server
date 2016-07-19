@@ -15,7 +15,7 @@ module.exports = function createServer() {
     // TODO: Handle long messages
     socket.on('data', (data) => {
       // Quit on a control-c
-      if (data.compare(Buffer.from([0xff, 0xf4, 0xff, 0xfd, 0x06])) === 0) {
+      if (data.compare(new Buffer([0xff, 0xf4, 0xff, 0xfd, 0x06])) === 0) {
         return socket.end();
       } else if (data.toString()[0] === '/') {
         return pool.emit('command', socket, data);

@@ -93,6 +93,8 @@ For a list of available commands run /help\n`);
   });
 }
 
+util.inherits(ClientPool, EE);
+
 ClientPool.prototype.formatMessage = function (sender, message) {
   if (sender === 'server') {
     const serverName = chalk.white.underline.bold('SERVER');
@@ -103,6 +105,5 @@ ClientPool.prototype.formatMessage = function (sender, message) {
   return `${username}: ${message}`;
 };
 
-util.inherits(ClientPool, EE);
 
 module.exports = ClientPool;
