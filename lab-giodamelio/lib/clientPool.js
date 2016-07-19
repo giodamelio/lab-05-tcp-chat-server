@@ -62,6 +62,7 @@ For a list of available commands run /help\n`);
       const message = `/help\t\t\t\tShows this help
 /nick <new_nicknam>\t\tChanges your nickname
 /list\t\t\t\tList current users
+/color\t\t\t\tSet your color. Choices ${colors.join(', ')}
 /quit\t\t\t\tGoodbye
 `;
       sender.write(message);
@@ -86,6 +87,21 @@ For a list of available commands run /help\n`);
         users.push(chalk[client.color](client.nick));
       }
       sender.write(`${users.join(', ')}\n`);
+    } else if (command === 'color') {
+      if (args.length !== 1) {
+        sender.write('Usage: /color <color_name>\n');
+        return;
+      }
+
+      debugger;
+      if (colors.indexOf(args[0]) === -1) {
+        sender.write(`You must choose from ${colors.join(', ')}\n`);
+        return;
+      }
+
+      sender.color = args[0];
+      sender.write(`Color changed to ${chalk[args[0]](args[0])}\n`);
+      return;
     } else {
       sender.write(`Command '${command}'is not supported\n`);
       return;
