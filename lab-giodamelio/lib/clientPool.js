@@ -17,20 +17,22 @@ function ClientPool() {
   // Add new client
   this.on('connect', (client) => {
     const id = shortid.generate();
+    console.log(`Connection (id: ${id})`);
     client.id = id;
     client.nick = `user_${id}`;
+    this.clients[id] = client;
 
     // Pick out a color for the user
     client.color = colors[Math.floor(colors.length * Math.random())];
 
-    this.clients[id] = client;
-    console.log(`Connection (id: ${id})`);
+    client.write(`Welcome to the ${chalk.underline.bold.white('BEST')} chat server ever!
+For a list of available commands run /help\n`);
   });
 
   // Remove a client
   this.on('disconnect', (client) => {
-    delete this.clients[client.id];
     console.log(`Disconnect (id: ${client.id})`);
+    delete this.clients[client.id];
   });
 
   // Broadcast a message to all clients
@@ -55,14 +57,22 @@ function ClientPool() {
     const command = rawCommand[0];
     const args = rawCommand.splice(1);
 
-    if (command === 'nick') {
+    if (command === 'help') {
+      const message = `/help\t\t\t\tShows this help
+/nick <new_nicknam>\t\tChanges your nickname
+`;
+      sender.write(message);
+      return;
+    } else if (command === 'nick') {
       if (args.length !== 1) {
-        return sender.write('Usage /nick <your_nickname>\n');
+        sender.write('Usage /nick <your_nickname>\n');
+        return;
       }
 
       console.log(`Changing nick from ${sender.nick} to ${args[0]}`);
       this.emit('broadcast', 'server', `${sender.nick} changed their nickname to ${args[0]}\n`);
       sender.nick = args[0];
+      return;
     }
   });
 }
