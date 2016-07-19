@@ -93,7 +93,6 @@ For a list of available commands run /help\n`);
         return;
       }
 
-      debugger;
       if (colors.indexOf(args[0]) === -1) {
         sender.write(`You must choose from ${colors.join(', ')}\n`);
         return;
