@@ -8,7 +8,7 @@ const shortid = require('shortid');
 
 const colors = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan'];
 
-function ClientPool() {
+function ClientPool(outputStream) {
   this.ee = new EE();
 
   // Keep track of our clients
@@ -17,7 +17,7 @@ function ClientPool() {
   // Add new client
   this.ee.on('connect', (client) => {
     const id = shortid.generate();
-    console.log(`Connect: (id: ${id})`);
+    outputStream.write(`Connect: (id: ${id})\n`);
     client.id = id;
     client.nick = `user_${id}`;
     this.clients[id] = client;
@@ -36,14 +36,14 @@ For a list of available commands run /help\n`);
 
   // Remove a client
   this.ee.on('disconnect', (client) => {
-    console.log(`Disconnect: (id: ${client.id})`);
+    outputStream.write(`Disconnect: (id: ${client.id})\n`);
     delete this.clients[client.id];
     this.ee.emit('broadcast', 'server', `${client.nick} has quit\n`);
   });
 
   // Broadcast a message to all clients
   this.ee.on('broadcast', (sender, message) => {
-    process.stdout.write(`Message: ${this.formatMessage(sender, message.toString())}`);
+    outputStream.write(`Message: ${this.formatMessage(sender, message.toString())}`);
     for (const id of Object.keys(this.clients)) {
       const client = this.clients[id];
       if (sender.id !== client.id) {
@@ -73,7 +73,7 @@ For a list of available commands run /help\n`);
         return;
       }
 
-      console.log(`Command: changing nick from ${sender.nick} to ${args[0]}`);
+      outputStream.write(`Command: changing nick from ${sender.nick} to ${args[0]}\n`);
       this.ee.emit('broadcast', 'server', `${sender.nick} changed their nickname to ${args[0]}\n`);
       sender.nick = args[0];
       return;

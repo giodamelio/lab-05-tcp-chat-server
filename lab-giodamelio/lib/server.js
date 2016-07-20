@@ -4,8 +4,8 @@ const Buffer = require('buffer').Buffer;
 
 const ClientPool = require('./clientPool');
 
-module.exports = function createServer() {
-  const pool = new ClientPool();
+module.exports = function createServer(outputStream) {
+  const pool = new ClientPool(outputStream);
 
   const server = net.createServer((socket) => {
     // Add new client
@@ -39,7 +39,7 @@ module.exports = function createServer() {
     if (command === 'list') {
       for (const id of Object.keys(pool.clients)) {
         const client = pool.clients[id];
-        process.stdout.write(`${client.nick} (${client.id})\n`);
+        outputStream.write(`${client.nick} (${client.id})\n`);
       }
       return;
     } else if (command === 'kick') {
@@ -53,7 +53,7 @@ module.exports = function createServer() {
           continue;
         }
         const client = pool.clients[id];
-        process.stdout.write(`Kicking user ${client.nick}(${client.id})\n`);
+        outputStream.write(`Kicking user ${client.nick}(${client.id})\n`);
         client.write('You have been kicked\n');
         client.end();
       }
