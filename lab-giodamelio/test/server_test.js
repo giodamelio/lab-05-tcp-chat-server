@@ -54,11 +54,15 @@ describe('Server', () => {
   it('Two users can chat', function (done) {
     const client1 = net.connect(this.port);
     const client2 = net.connect(this.port);
-    const messages = ['\u001b[37m\u001b[4m\u001b[1mSERVER\u001b[22m\u001b[24m\u001b[39m:', 'test message', 'Welcome to the \u001b[4m\u001b[1m\u001b[37mBEST\u001b[39m\u001b[22m\u001b[24m chat server ever!\nRun /nick <new_nickname> to set your name\nFor a list of available commands run /help\n\u001b[37m\u001b[4m\u001b[1mSERVER\u001b[22m\u001b[24m\u001b[39m:']; //eslint-disable-line
+    const messages = [
+      'Welcome to the \u001b[4m\u001b[1m\u001b[37mBEST\u001b[39m\u001b[22m\u001b[24m chat server ever!\nRun /nick <new_nickname> to set your name\nFor a list of available commands run /help\n\u001b[37m\u001b[4m\u001b[1mSERVER\u001b[22m\u001b[24m\u001b[39m:', //eslint-disable-line
+      'test message',
+      '\u001b[37m\u001b[4m\u001b[1mSERVER\u001b[22m\u001b[24m\u001b[39m:',
+    ];
     const toSend = ['test message'];
 
     client2.on('data', (data) => {
-      expect(data.toString()).to.have.string(messages.pop());
+      expect(data.toString()).to.have.string(messages.shift());
       if (toSend.length) {
         client1.write(toSend.pop());
       } else {
