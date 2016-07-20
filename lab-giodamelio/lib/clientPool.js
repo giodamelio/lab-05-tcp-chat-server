@@ -1,5 +1,4 @@
 'use strict';
-const util = require('util');
 const EE = require('events');
 
 const chalk = require('chalk');
